@@ -1,0 +1,198 @@
+.about {
+  padding: 32px 0;
+}
+
+@media (min-width: 768px) {
+  .about {
+    padding: 64px 0;
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  width: 100%;
+}
+
+.grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column-reverse; /* Changed to column-reverse */
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 64px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .imageWrapper {
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.imageWrapper {
+  position: relative;
+  margin-top: 30px;
+}
+
+.backgroundGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-radius: 24px;
+  filter: blur(60px);
+  opacity: 0.15;
+}
+
+.imageContainer {
+  position: relative;
+  aspect-ratio: 4/5;
+  max-width: 420px;
+  margin: 0 auto;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid #27272a;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to top, #0a0a0a, transparent);
+}
+
+.experienceBadge {
+  position: absolute;
+  right: 10%;
+  bottom: -20px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  padding: 20px 28px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(99, 102, 241, 0.3);
+  text-align: center;
+}
+
+.experienceValue {
+  font-size: 36px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.experienceLabel {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 4px;
+}
+
+.title {
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 28px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bioContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 36px;
+}
+
+.bioText {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #a1a1aa;
+}
+
+.highlight {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.highlightSecondary {
+  color: #6366f1;
+}
+
+.highlightWhite {
+  color: #ffffff;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.infoCard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  background: #141414;
+  border: 1px solid #27272a;
+  border-radius: 14px;
+  transition: all 0.3s ease;
+}
+
+.infoCard:hover {
+  transform: translateY(-2px);
+}
+
+.iconContainer {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.cardLabel {
+  font-size: 12px;
+  color: #71717a;
+  margin-bottom: 2px;
+}
+
+.cardValue {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.gradientText {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
