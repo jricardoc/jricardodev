@@ -1,73 +1,141 @@
-# React + TypeScript + Vite
+# 🚀 Manual de Deploy: React/Vite no EasyPanel
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este documento serve como guia rápido para subir sites estáticos (React/Vite) no EasyPanel utilizando Docker.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📋 1. Preparação Local (VS Code)
 
-## React Compiler
+Antes de enviar o projeto, garanta que o arquivo `.gitignore` existe na raiz para não enviar "lixo" para o servidor.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**Arquivo `.gitignore`:**
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```gitignore
+node_modules
+dist
+build
+.env
+.DS_Store
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+**Comandos Git (Para novos projetos):**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git init
+git add .
+git commit -m "Upload inicial"
+git branch -M main
+# Substitua pela URL do seu repositório criado no GitHub
+git remote add origin https://github.com/SEU_USUARIO/NOME_DO_REPO.git
+git push -u origin main
 ```
+
+---
+
+## ⚙️ 2. Configuração no EasyPanel
+
+Crie um novo Service do tipo **App**. Configure as abas conforme abaixo:
+
+### Aba "Source" (Fonte)
+
+| Campo      | Valor                                                              |
+| ---------- | ------------------------------------------------------------------ |
+| Type       | Git                                                                |
+| Repository | nome-do-repo (Apenas o nome, ex: `dranataliabarreto`)              |
+| User       | Seu usuário do GitHub                                              |
+| Token      | Cole seu Token de Acesso Pessoal (começa com `ghp_...`)            |
+
+> [!IMPORTANT]
+> Não use a senha da conta, o GitHub exige o Token.
+
+### Aba "Build" (Construção) — ⚠️ IMPORTANTE
+
+O segredo para o site não ficar em branco está aqui.
+
+| Campo         | Valor      |
+| ------------- | ---------- |
+| Build Method  | Nixpacks   |
+
+**Start Command (Comando de Início):**
+
+Copie e cole este comando exato:
+
+```bash
+npx -y serve -s dist -l 80
+```
+
+**Explicação do comando:**
+
+| Parte          | Descrição                                    |
+| -------------- | -------------------------------------------- |
+| `npx -y serve` | Baixa um servidor leve na hora               |
+| `-s`           | Modo SPA (evita erro 404 ao atualizar a página) |
+| `dist`         | Pasta onde o Vite gera o site                |
+| `-l 80`        | Força a rodar na porta 80                    |
+
+---
+
+## 🌐 3. Configuração de Domínio (Evitar Erro 500)
+
+Para o SSL (cadeado) funcionar e o site abrir:
+
+1. Vá na aba **Domains**
+2. Adicione o domínio (ex: `cliente.com.br`)
+3. Clique no **Lápis** (Editar) e configure:
+
+| Campo         | Valor      |
+| ------------- | ---------- |
+| HTTPS         | ✅ Ligado   |
+| Force HTTPS   | ✅ Ligado   |
+| Port (Porta)  | 80         |
+| Protocol      | **HTTP**   |
+
+> [!CAUTION]
+> **MUITO IMPORTANTE:** No campo Protocol (Destino), não coloque HTTPS. Deve ser **HTTP**.
+
+---
+
+## 📂 4. Deploy em Subdiretório (Ex: `/nova-lp`)
+
+Se o site não for o principal e tiver que abrir em `meusite.com/nova-lp`:
+
+### Passo A: No EasyPanel (Aba Domains)
+
+No serviço da Landing Page:
+
+| Campo | Valor       |
+| ----- | ----------- |
+| Host  | meusite.com |
+| Path  | /nova-lp    |
+
+### Passo B: No Código (`vite.config.ts`)
+
+Você precisa configurar a "base" no Vite, senão a tela fica branca.
+
+**Arquivo `vite.config.ts`:**
+
+```typescript
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  // O nome aqui deve ser IDÊNTICO ao "Path" do EasyPanel
+  base: '/nova-lp/', 
+  plugins: [react()],
+})
+```
+
+> [!TIP]
+> Faça o commit e push dessa alteração.
+
+---
+
+## 🆘 Solução de Problemas
+
+| Problema                        | Causa Provável                     | Solução                                                                 |
+| ------------------------------- | ---------------------------------- | ----------------------------------------------------------------------- |
+| Erro 500 (Internal Server Error)| Protocolo de destino errado        | Edite o domínio e mude o destino para **HTTP** (não HTTPS)              |
+| Tela Branca                     | Servidor não achou a pasta `dist`  | Verifique se o Start Command está: `npx -y serve -s dist -l 80`         |
+| Tela Branca (Subdiretório)      | Faltou configurar o `base`         | Edite o `vite.config.ts` conforme o passo 4                             |
+| Site "Não Seguro"               | SSL falhou na geração              | Corrija o erro 500 primeiro. O SSL é gerado automaticamente após o site subir corretamente |
