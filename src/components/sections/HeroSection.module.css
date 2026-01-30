@@ -84,6 +84,7 @@
 .highlightText {
   background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline;
 }
@@ -187,6 +188,7 @@
   font-weight: 700;
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -270,13 +272,13 @@
 
 .badgeLabel {
   font-size: 11px;
-  color: #71717a;
+  color: #a1a1aa; /* Increased contrast from #71717a */
 }
 
 .badgeTitle {
   font-size: 14px;
   font-weight: 600;
-  color: #6366f1;
+  color: #818cf8; /* Increased contrast from #6366f1 */
 }
 
 .scrollIndicator {

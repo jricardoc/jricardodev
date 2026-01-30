@@ -1,0 +1,7 @@
+# robots.txt para jricardodev
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://jricardodev.com.br/sitemap.xml

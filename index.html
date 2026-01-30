@@ -1,37 +1,52 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- SEO -->
-    <title>Ricardo Carvalho | Desenvolvedor Full Stack</title>
-    <meta name="description" content="Desenvolvedor Full Stack com 7 anos de experiência. Crio sites, aplicativos e sistemas personalizados. Fundador da RICCS." />
-    <meta name="keywords" content="desenvolvedor, full stack, react, node.js, salvador, bahia, sites, aplicativos, sistemas, RICCS" />
-    <meta name="author" content="Ricardo Carvalho" />
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Ricardo Carvalho | Desenvolvedor Full Stack" />
-    <meta property="og:description" content="Transformando ideias em experiências digitais. 7 anos criando soluções que fazem a diferença." />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="pt_BR" />
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Ricardo Carvalho | Desenvolvedor Full Stack" />
-    <meta name="twitter:description" content="Transformando ideias em experiências digitais. 7 anos criando soluções que fazem a diferença." />
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#0A0A0A" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO -->
+  <title>Ricardo Carvalho | Desenvolvedor Full Stack</title>
+  <meta name="description"
+    content="Desenvolvedor Full Stack com 7 anos de experiência. Crio sites, aplicativos e sistemas personalizados. Fundador da RICCS." />
+  <meta name="keywords"
+    content="desenvolvedor, full stack, react, node.js, salvador, bahia, sites, aplicativos, sistemas, RICCS" />
+  <meta name="author" content="Ricardo Carvalho" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Ricardo Carvalho | Desenvolvedor Full Stack" />
+  <meta property="og:description"
+    content="Transformando ideias em experiências digitais. 7 anos criando soluções que fazem a diferença." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Ricardo Carvalho | Desenvolvedor Full Stack" />
+  <meta name="twitter:description"
+    content="Transformando ideias em experiências digitais. 7 anos criando soluções que fazem a diferença." />
+
+  <!-- Fonts - Optimized loading with preconnect and font-display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  </noscript>
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#0A0A0A" />
+
+  <!-- Google Maps API for Places/Reviews - defer loading -->
+  <script defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQCevyCp6TuRhNnGP6INW7qQPcMTZ7f5U&libraries=places"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>

@@ -31,7 +31,7 @@ export function Footer() {
 
           {/* Links Column 1 */}
           <div>
-            <h4 className={styles.columnHeader}>Navegação</h4>
+            <span className={styles.columnHeader}>Navegação</span>
             <ul className={styles.linkList}>
               {["Início", "Sobre", "Serviços", "Portfólio"].map((item) => (
                 <li key={item} className={styles.linkItem}>
@@ -53,7 +53,7 @@ export function Footer() {
 
           {/* Links Column 2 */}
           <div>
-            <h4 className={styles.columnHeader}>Social</h4>
+            <span className={styles.columnHeader}>Social</span>
             <ul className={styles.linkList}>
               {[
                 {
@@ -96,7 +96,7 @@ export function Footer() {
 
           {/* Contact Column */}
           <div>
-            <h4 className={styles.columnHeader}>Contato</h4>
+            <span className={styles.columnHeader}>Contato</span>
             <ul className={styles.linkList}>
               <li className={styles.linkItem}>
                 <a

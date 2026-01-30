@@ -6,6 +6,7 @@ import { HeroSection } from "./components/sections/HeroSection";
 import { AboutSection } from "./components/sections/AboutSection";
 import { SkillsSection } from "./components/sections/SkillsSection";
 import { PortfolioSection } from "./components/sections/PortfolioSection";
+import { ReviewsSection } from "./components/sections/ReviewsSection";
 import { RiccsSection } from "./components/sections/RiccsSection";
 import { ContactSection } from "./components/sections/ContactSection";
 import { LoadingScreen } from "./components/ui/LoadingScreen";
@@ -37,6 +38,7 @@ function App() {
           <SkillsSection />
           <PortfolioSection />
           <RiccsSection />
+          <ReviewsSection />
           <ContactSection />
         </main>
 

@@ -4,11 +4,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./PortfolioSection.module.css";
 import { ProjectModal, type Project } from "../ui/ProjectModal";
 
-// Project Images
-import raNutriImg from "../../assets/projetos/ranutri.png";
-import warleyImg from "../../assets/projetos/warleymonteiro.png";
-import copyTradeImg from "../../assets/projetos/ocaradocopytrade.png";
-import drawdownImg from "../../assets/projetos/drawdownguard.png";
+// Project Images - Using WebP for better performance
+import raNutriImg from "../../assets/projetos/ranutri.webp";
+import warleyImg from "../../assets/projetos/warleymonteiro.webp";
+import copyTradeImg from "../../assets/projetos/ocaradocopytrade.webp";
+import drawdownImg from "../../assets/projetos/DDG.webp";
+import draNataliaImg from "../../assets/projetos/dranataliabarreto.webp";
+import acaiImg from "../../assets/projetos/acai.webp";
+import designacoesImg from "../../assets/projetos/designacoes.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -31,9 +34,36 @@ const projects: Project[] = [
     techs: ["React", "Vite", "CSS Modules", "SEO"],
     link: "https://www.ranutri.com.br/",
     videoUrl: "https://i.imgur.com/zR6uADV.mp4",
+    githubUrl: "https://github.com/jricardoc/cliente-rafael",
   },
   {
     id: 2,
+    title: "Dra. Natália Barreto",
+    category: "web",
+    image: draNataliaImg,
+    description:
+      "Site premium para Dentista especializada em Estética e Reabilitação Oral.",
+    longDescription:
+      "Landing page elegante desenvolvida em React + Vite para uma dentista especializada em Salvador. O design transmite sofisticação e confiança, com paleta de cores refinada e tipografia premium. O projeto inclui animações suaves, otimização SEO para ranqueamento local e uma experiência responsiva impecável.",
+    techs: ["React", "Vite", "CSS Modules", "GSAP"],
+    link: "https://dranataliabarreto.com.br/",
+    githubUrl: "https://github.com/jricardoc/dranataliabarreto",
+  },
+  {
+    id: 3,
+    title: "Açaí na Garrafa",
+    category: "web",
+    image: acaiImg,
+    description:
+      "Landing Page de vendas para infoproduto sobre negócio de açaí.",
+    longDescription:
+      "Página de vendas de alta conversão desenvolvida em React + Vite para um infoproduto sobre como iniciar um negócio de açaí na garrafa. O design utiliza cores vibrantes, prova social e gatilhos mentais estratégicos. Inclui carrossel de depoimentos, seção de FAQs e integração com plataforma de pagamento.",
+    techs: ["React", "Vite", "Swiper", "CSS Modules"],
+    link: "https://acainagarrafa.site/",
+    githubUrl: "https://github.com/jricardoc/acainagarrafa",
+  },
+  {
+    id: 4,
     title: "Warley Monteiro",
     category: "web",
     image: warleyImg,
@@ -45,7 +75,7 @@ const projects: Project[] = [
     videoUrl: "https://i.imgur.com/gZrgNdw.mp4",
   },
   {
-    id: 3,
+    id: 5,
     title: "O Cara do CopyTrade",
     category: "web",
     image: copyTradeImg,
@@ -57,7 +87,7 @@ const projects: Project[] = [
     videoUrl: "https://i.imgur.com/s29NU2h.mp4",
   },
   {
-    id: 4,
+    id: 6,
     title: "Drawdown Guard",
     category: "sistemas",
     image: drawdownImg,
@@ -67,6 +97,18 @@ const projects: Project[] = [
     techs: ["Node.js", "React", "PostgreSQL", "Docker"],
     link: "https://drawdownguard.com.br/",
     videoUrl: "https://i.imgur.com/V3qiDwT.mp4",
+  },
+  {
+    id: 7,
+    title: "Quadro de Designações",
+    category: "sistemas",
+    image: designacoesImg,
+    description:
+      "Sistema de gerenciamento de escalas e designações com arquitetura monorepo.",
+    longDescription:
+      "Sistema completo para gerenciar designações de tarefas e escalas. Arquitetura monorepo com frontend em React + Vite e backend em Node.js com Express e Prisma ORM. Banco de dados PostgreSQL gerenciado via Docker. Inclui interface intuitiva para CRUD de designações, controle de usuários e geração de relatórios.",
+    techs: ["React", "Node.js", "PostgreSQL", "Docker", "Prisma"],
+    githubUrl: "https://github.com/jricardoc/designacoes-jw",
   },
 ];
 
@@ -99,7 +141,7 @@ export function PortfolioSection() {
           stagger: 0.1,
           ease: "power3.out",
           overwrite: "auto",
-        }
+        },
       );
     }, gridRef);
 
@@ -153,10 +195,29 @@ export function PortfolioSection() {
                   src={project.image}
                   alt={project.title}
                   className={styles.projectImage}
+                  loading="lazy"
+                  decoding="async"
                 />
 
                 {/* Category Badge */}
                 <div className={styles.categoryBadge}>{project.category}</div>
+
+                {/* Saiba Mais Badge */}
+                <div className={styles.saibaMaisBadge}>
+                  <span>Saiba mais</span>
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </div>
               </div>
 
               {/* Content */}

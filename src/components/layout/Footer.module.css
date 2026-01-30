@@ -88,6 +88,7 @@
 }
 
 .columnHeader {
+  display: block;
   font-size: 14px;
   font-weight: 600;
   color: #ffffff;
@@ -108,7 +109,7 @@
 
 .link {
   font-size: 14px;
-  color: #71717a;
+  color: #a1a1aa; /* Increased contrast from #71717a */
   text-decoration: none;
   transition: color 0.2s ease;
   display: inline-block;
@@ -120,7 +121,7 @@
 
 .socialLink {
   font-size: 14px;
-  color: #71717a;
+  color: #a1a1aa; /* Increased contrast from #71717a */
   text-decoration: none;
   transition: color 0.2s ease;
   display: inline-flex;
@@ -139,6 +140,7 @@
   text-decoration: none;
   background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -155,7 +157,7 @@
 
 .copyright {
   font-size: 13px;
-  color: #52525b;
+  color: #71717a; /* Slightly increased contrast from #52525b */
 }
 
 .scrollTopButton {
