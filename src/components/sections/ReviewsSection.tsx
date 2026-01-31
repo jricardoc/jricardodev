@@ -19,7 +19,9 @@ interface PlaceDetails {
   reviews: Review[];
 }
 
-const PLACE_ID = "ChIJ7czqXf4XFgcRpDoB4MzLJqo";
+// Environment variables (configured in .env locally and in EasyPanel for production)
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+const PLACE_ID = import.meta.env.VITE_GOOGLE_PLACE_ID;
 
 // Extend Window interface for Google Maps
 declare global {
@@ -55,6 +57,32 @@ declare global {
   }
 }
 
+// Function to load Google Maps script dynamically
+function loadGoogleMapsScript(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (window.google?.maps?.places) {
+      resolve();
+      return;
+    }
+
+    const existingScript = document.getElementById("google-maps-script");
+    if (existingScript) {
+      existingScript.addEventListener("load", () => resolve());
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.id = "google-maps-script";
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`;
+    script.async = true;
+    script.defer = true;
+    script.onload = () => resolve();
+    script.onerror = () =>
+      reject(new Error("Failed to load Google Maps script"));
+    document.head.appendChild(script);
+  });
+}
+
 export function ReviewsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -64,113 +92,86 @@ export function ReviewsSection() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchReviews = () => {
+    const fetchReviews = async () => {
       console.log("🔄 Iniciando busca de avaliações...");
 
-      // Wait for Google Maps API to load
-      let attempts = 0;
-      const maxAttempts = 100; // 10 seconds max
+      if (!GOOGLE_MAPS_API_KEY) {
+        console.error("❌ VITE_GOOGLE_MAPS_API_KEY não definida!");
+        setError("Configuração de API ausente.");
+        setLoading(false);
+        return;
+      }
 
-      const checkGoogleMaps = setInterval(() => {
-        attempts++;
+      try {
+        await loadGoogleMapsScript();
+        console.log("✅ Google Maps API carregada!");
 
-        if (attempts % 10 === 0) {
-          console.log(
-            `⏳ Tentativa ${attempts}/${maxAttempts} - Aguardando Google Maps API...`,
-          );
-          console.log("window.google:", window.google);
+        if (!mapRef.current) {
+          console.error("❌ mapRef.current é null!");
+          setError("Erro interno: elemento de referência não encontrado.");
+          setLoading(false);
+          return;
         }
 
-        if (window.google && window.google.maps && window.google.maps.places) {
-          clearInterval(checkGoogleMaps);
-          console.log("✅ Google Maps API carregada!");
-          console.log("Google Maps object:", window.google.maps);
+        // Create a PlacesService instance
+        const service = new window.google!.maps.places.PlacesService(
+          mapRef.current,
+        );
+        console.log("✅ PlacesService criado");
 
-          try {
-            if (!mapRef.current) {
-              console.error("❌ mapRef.current é null!");
-              setError("Erro interno: elemento de referência não encontrado.");
-              setLoading(false);
-              return;
+        const request = {
+          placeId: PLACE_ID,
+          fields: ["rating", "user_ratings_total", "reviews"],
+        };
+        console.log("📤 Enviando requisição:", request);
+
+        service.getDetails(request, (place, status) => {
+          console.log("📥 Resposta recebida!");
+          console.log("Status:", status);
+
+          if (
+            status === window.google!.maps.places.PlacesServiceStatus.OK &&
+            place
+          ) {
+            console.log("✅ Avaliações carregadas com sucesso!");
+            const transformedData: PlaceDetails = {
+              rating: place.rating || 0,
+              user_ratings_total: place.user_ratings_total || 0,
+              reviews: (place.reviews || []).map((review) => ({
+                author_name: review.author_name || "Usuário",
+                profile_photo_url: review.profile_photo_url || "",
+                rating: review.rating || 5,
+                text: review.text || "",
+                relative_time_description:
+                  review.relative_time_description || "",
+              })),
+            };
+            setPlaceDetails(transformedData);
+            setError(null);
+          } else {
+            console.error("❌ Erro da Places API:", status);
+
+            let errorMessage = `Erro: ${status}`;
+            if (status === "REQUEST_DENIED") {
+              errorMessage =
+                "Acesso negado. Verifique se a Maps JavaScript API está ativada no Google Cloud Console.";
+            } else if (status === "INVALID_REQUEST") {
+              errorMessage = "Place ID inválido ou não encontrado.";
+            } else if (status === "OVER_QUERY_LIMIT") {
+              errorMessage = "Limite de requisições excedido.";
             }
 
-            // Create a hidden div for the PlacesService (required)
-            const service = new window.google.maps.places.PlacesService(
-              mapRef.current!,
-            );
-            console.log("✅ PlacesService criado:", service);
-
-            const request = {
-              placeId: PLACE_ID,
-              fields: ["rating", "user_ratings_total", "reviews"],
-            };
-            console.log("📤 Enviando requisição:", request);
-
-            service.getDetails(request, (place, status) => {
-              console.log("📥 Resposta recebida!");
-              console.log("Status:", status);
-              console.log("Place:", place);
-
-              if (
-                status === window.google!.maps.places.PlacesServiceStatus.OK &&
-                place
-              ) {
-                console.log("✅ Avaliações carregadas com sucesso!");
-                const transformedData: PlaceDetails = {
-                  rating: place.rating || 0,
-                  user_ratings_total: place.user_ratings_total || 0,
-                  reviews: (place.reviews || []).map((review) => ({
-                    author_name: review.author_name || "Usuário",
-                    profile_photo_url: review.profile_photo_url || "",
-                    rating: review.rating || 5,
-                    text: review.text || "",
-                    relative_time_description:
-                      review.relative_time_description || "",
-                  })),
-                };
-                console.log("📊 Dados transformados:", transformedData);
-                setPlaceDetails(transformedData);
-                setError(null);
-              } else {
-                console.error("❌ Erro da Places API:", status);
-
-                let errorMessage = `Erro: ${status}`;
-                if (status === "REQUEST_DENIED") {
-                  errorMessage =
-                    "Acesso negado. Verifique se a Maps JavaScript API está ativada no Google Cloud Console.";
-                } else if (status === "INVALID_REQUEST") {
-                  errorMessage = "Place ID inválido ou não encontrado.";
-                } else if (status === "OVER_QUERY_LIMIT") {
-                  errorMessage = "Limite de requisições excedido.";
-                }
-
-                setError(errorMessage);
-              }
-              setLoading(false);
-            });
-          } catch (err) {
-            console.error("❌ Exceção ao buscar avaliações:", err);
-            setError(
-              err instanceof Error
-                ? err.message
-                : "Erro ao carregar avaliações",
-            );
-            setLoading(false);
+            setError(errorMessage);
           }
-        }
-
-        if (attempts >= maxAttempts) {
-          clearInterval(checkGoogleMaps);
-          console.error(
-            "❌ Timeout: Google Maps API não carregou após 10 segundos",
-          );
-          console.log("window.google final:", window.google);
-          setError(
-            "Não foi possível carregar a API do Google Maps. Verifique se a Maps JavaScript API está ativada.",
-          );
           setLoading(false);
-        }
-      }, 100);
+        });
+      } catch (err) {
+        console.error("❌ Exceção ao buscar avaliações:", err);
+        setError(
+          err instanceof Error ? err.message : "Erro ao carregar avaliações",
+        );
+        setLoading(false);
+      }
     };
 
     fetchReviews();
